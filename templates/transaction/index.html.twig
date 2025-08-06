@@ -1,49 +1,130 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Transaction index{% endblock %}
+{% block title %}Gestion des Transactions{% endblock %}
 
 {% block body %}
-    <h1>Transaction index</h1>
+    <div class="card fade-in">
+        <div class="card-header">
+            <h1 class="card-title">
+                <i class="fas fa-chart-line"></i>
+                Gestion des Transactions
+            </h1>
+            <a href="{{ path('app_transaction_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Nouvelle Transaction
+            </a>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Type</th>
-                <th>Category</th>
-                <th>Date</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for transaction in transactions %}
-            <tr>
-                <td>{{ transaction.id }}</td>
-                <td>{{ transaction.title }}</td>
-                <td>{{ transaction.description }}</td>
-                <td>{{ transaction.amount }}</td>
-                <td>{{ transaction.type }}</td>
-                <td>{{ transaction.category }}</td>
-                <td>{{ transaction.date ? transaction.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ transaction.createdAt ? transaction.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ transaction.updatedAt ? transaction.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_transaction_show', {'id': transaction.id}) }}">show</a>
-                    <a href="{{ path('app_transaction_edit', {'id': transaction.id}) }}">edit</a>
-                </td>
-            </tr>
+        {% if transactions|length > 0 %}
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Titre</th>
+                            <th>Montant</th>
+                            <th>Type</th>
+                            <th>Catégorie</th>
+                            <th>Date</th>
+                            <th>Utilisateur</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>
+                                <span class="badge badge-info">#{{ transaction.id }}</span>
+                            </td>
+                            <td>
+                                <strong>{{ transaction.title }}</strong>
+                                {% if transaction.description %}
+                                    <br><small class="text-muted">{{ transaction.description|slice(0, 50) }}{% if transaction.description|length > 50 %}...{% endif %}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="{% if transaction.amount >= 0 %}amount-positive{% else %}amount-negative{% endif %}">
+                                    <i class="fas fa-{% if transaction.amount >= 0 %}arrow-up{% else %}arrow-down{% endif %}"></i>
+                                    {{ transaction.amount|number_format(2, ',', ' ') }} €
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge badge-{% if transaction.type == 'Revenu' %}success{% else %}danger{% endif %}">
+                                    {{ transaction.type }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if transaction.category %}
+                                    <span class="badge badge-info">{{ transaction.category }}</span>
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <i class="fas fa-calendar"></i>
+                                {{ transaction.date ? transaction.date|date('d/m/Y') : '' }}
+                            </td>
+                            <td>
+                                {% if transaction.user %}
+                                    <i class="fas fa-user"></i>
+                                    {{ transaction.user.firstName }} {{ transaction.user.lastName }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ path('app_transaction_show', {'id': transaction.id}) }}" class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-eye"></i>
+                                        Voir
+                                    </a>
+                                    <a href="{{ path('app_transaction_edit', {'id': transaction.id}) }}" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                        Modifier
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Statistiques rapides -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Statistiques
+                    </h3>
+                </div>
+                <div class="d-flex gap-4">
+                    <div class="text-center">
+                        <h4 class="amount-positive">{{ transactions|filter(t => t.amount >= 0)|reduce((sum, t) => sum + t.amount, 0)|number_format(2, ',', ' ') }} €</h4>
+                        <small class="text-muted">Total Revenus</small>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="amount-negative">{{ transactions|filter(t => t.amount < 0)|reduce((sum, t) => sum + t.amount, 0)|number_format(2, ',', ' ') }} €</h4>
+                        <small class="text-muted">Total Dépenses</small>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="{% if (transactions|reduce((sum, t) => sum + t.amount, 0)) >= 0 %}amount-positive{% else %}amount-negative{% endif %}">
+                            {{ transactions|reduce((sum, t) => sum + t.amount, 0)|number_format(2, ',', ' ') }} €
+                        </h4>
+                        <small class="text-muted">Solde</small>
+                    </div>
+                </div>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_transaction_new') }}">Create new</a>
+            <div class="text-center">
+                <i class="fas fa-chart-line" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                <h3>Aucune transaction trouvée</h3>
+                <p class="text-muted">Commencez par créer votre première transaction.</p>
+                <a href="{{ path('app_transaction_new') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Créer la première transaction
+                </a>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FinanceTracker - Dashboard{% endblock %}
+
+{% block body %}
+    <!-- Statistiques principales -->
+    <div class="d-flex gap-4 mb-6">
+        <div class="card" style="flex: 1;">
+            <div class="text-center">
+                <div style="font-size: 2rem; color: #8B5CF6; margin-bottom: 0.5rem;">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <h3 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">
+                    {{ transactions|reduce((sum, t) => sum + t.amount, 0)|number_format(2, ',', ' ') }} €
+                </h3>
+                <p style="color: #10b981; font-size: 0.875rem; margin: 0;">
+                    <i class="fas fa-arrow-up"></i>
+                    Solde total
+                </p>
+            </div>
+        </div>
+        
+        <div class="card" style="flex: 1;">
+            <div class="text-center">
+                <div style="font-size: 2rem; color: #10b981; margin-bottom: 0.5rem;">
+                    <i class="fas fa-arrow-up"></i>
+                </div>
+                <h3 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">
+                    {{ transactions|filter(t => t.amount >= 0)|reduce((sum, t) => sum + t.amount, 0)|number_format(2, ',', ' ') }} €
+                </h3>
+                <p style="color: #10b981; font-size: 0.875rem; margin: 0;">
+                    <i class="fas fa-arrow-up"></i>
+                    Total Revenus
+                </p>
+            </div>
+        </div>
+        
+        <div class="card" style="flex: 1;">
+            <div class="text-center">
+                <div style="font-size: 2rem; color: #ef4444; margin-bottom: 0.5rem;">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                <h3 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">
+                    {{ transactions|filter(t => t.amount < 0)|reduce((sum, t) => sum + t.amount, 0)|number_format(2, ',', ' ') }} €
+                </h3>
+                <p style="color: #ef4444; font-size: 0.875rem; margin: 0;">
+                    <i class="fas fa-arrow-down"></i>
+                    Total Dépenses
+                </p>
+            </div>
+        </div>
+        
+        <div class="card" style="flex: 1;">
+            <div class="text-center">
+                <div style="font-size: 2rem; color: #8B5CF6; margin-bottom: 0.5rem;">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">
+                    {{ users|length }}
+                </h3>
+                <p style="color: #64748b; font-size: 0.875rem; margin: 0;">
+                    Utilisateurs actifs
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <i class="fas fa-bolt"></i>
+                Actions rapides
+            </h2>
+        </div>
+        <div class="d-flex gap-4">
+            <a href="{{ path('app_user_new') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-user-plus"></i>
+                Nouvel Utilisateur
+            </a>
+            <a href="{{ path('app_transaction_new') }}" class="btn btn-success btn-lg">
+                <i class="fas fa-plus"></i>
+                Nouvelle Transaction
+            </a>
+            <a href="{{ path('app_user_index') }}" class="btn btn-secondary btn-lg">
+                <i class="fas fa-users"></i>
+                Gérer les Utilisateurs
+            </a>
+            <a href="{{ path('app_transaction_index') }}" class="btn btn-warning btn-lg">
+                <i class="fas fa-chart-line"></i>
+                Voir les Transactions
+            </a>
+        </div>
+    </div>
+
+    <!-- Dernières transactions -->
+    {% if transactions|length > 0 %}
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-clock"></i>
+                    Dernières Transactions
+                </h2>
+                <a href="{{ path('app_transaction_index') }}" class="btn btn-sm btn-secondary">
+                    Voir toutes
+                </a>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Montant</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Utilisateur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for transaction in transactions|slice(0, 5) %}
+                        <tr>
+                            <td>
+                                <strong>{{ transaction.title }}</strong>
+                            </td>
+                            <td>
+                                <span class="{% if transaction.amount >= 0 %}amount-positive{% else %}amount-negative{% endif %}">
+                                    {{ transaction.amount|number_format(2, ',', ' ') }} €
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge badge-{% if transaction.type == 'Revenu' %}success{% else %}danger{% endif %}">
+                                    {{ transaction.type }}
+                                </span>
+                            </td>
+                            <td>
+                                <i class="fas fa-calendar"></i>
+                                {{ transaction.date ? transaction.date|date('d/m/Y') : '' }}
+                            </td>
+                            <td>
+                                {% if transaction.user %}
+                                    <i class="fas fa-user"></i>
+                                    {{ transaction.user.firstName }} {{ transaction.user.lastName }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %} 
