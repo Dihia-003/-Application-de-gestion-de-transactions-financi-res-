@@ -14,13 +14,12 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(EntityManagerInterface $entityManager): Response
     {
+        if (!$this->getUser()) {
+            return $this->render('home/landing.html.twig');
+        }
+
         $users = $entityManager->getRepository(User::class)->findAll();
         $transactions = $entityManager->getRepository(Transaction::class)->findAll();
-
-        // Si pas d'utilisateurs, rediriger vers le login
-        if (empty($users)) {
-            return $this->redirectToRoute('app_login');
-        }
 
         return $this->render('home/index.html.twig', [
             'users' => $users,

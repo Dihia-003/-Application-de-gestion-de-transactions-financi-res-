@@ -442,6 +442,7 @@
             </ul>
             
             <!-- Section déconnexion -->
+            {% if app.user %}
             <div style="margin-top: auto; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
                 <div class="nav-item">
                     <a href="{{ path('app_logout') }}" class="nav-link" style="color: #ef4444;">
@@ -450,6 +451,16 @@
                     </a>
                 </div>
             </div>
+            {% else %}
+            <div style="margin-top: auto; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+                <div class="nav-item">
+                    <a href="{{ path('app_login') }}" class="nav-link">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Se connecter</span>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
         </nav>
 
         <!-- Main Content -->
@@ -467,15 +478,19 @@
                     <button class="notification-btn">
                         <i class="fas fa-bell"></i>
                     </button>
+                    {% if app.user %}
                     <div class="user-info">
                         <div class="user-avatar">
                             <i class="fas fa-user"></i>
                         </div>
                         <div>
-                            <div style="font-weight: 600; font-size: 0.875rem;">Admin</div>
-                            <div style="font-size: 0.75rem; color: #94a3b8;">admin@example.com</div>
+                            <div style="font-weight: 600; font-size: 0.875rem;">{{ app.user.firstName ?? 'Utilisateur' }}</div>
+                            <div style="font-size: 0.75rem; color: #94a3b8;">{{ app.user.email ?? '' }}</div>
                         </div>
                     </div>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-secondary">Se connecter</a>
+                {% endif %}
                 </div>
             </header>
 
