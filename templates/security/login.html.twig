@@ -142,6 +142,8 @@
                     <input type="password" id="password" name="_password" class="form-control" required>
                 </div>
                 
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                
                 <button type="submit" class="btn">
                     <i class="fas fa-sign-in-alt"></i>
                     Se connecter

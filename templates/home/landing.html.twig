@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinanceTracker - Bienvenue</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #8B5CF6;
+      --primary-strong: #7C3AED;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 30px 60px rgba(2,6,23,.12);
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: 'Inter', sans-serif; color: var(--text); background: linear-gradient(135deg, #ede9fe, #e0e7ff); display: grid; place-items: center; padding: clamp(1rem, 3vw, 2rem); }
+
+    .auth-shell { width: 100%; max-width: 1100px; background: #fff; border: 1px solid #eef2ff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; min-height: 70dvh; }
+
+    /* Panel gauche avec dégradés organiques */
+    .panel-left { position: relative; background: linear-gradient(140deg, #f5d0fe 0%, #c4b5fd 35%, #8b5cf6 75%); display: grid; place-items: center; padding: clamp(1rem, 3vw, 2rem); }
+    .blob { position: absolute; inset: 0; background:
+      radial-gradient(120% 80% at 20% 15%, rgba(255,255,255,.35), transparent 60%),
+      radial-gradient(85% 65% at 80% 25%, rgba(255,255,255,.25), transparent 60%),
+      radial-gradient(70% 60% at 30% 85%, rgba(255,255,255,.2), transparent 60%);
+      mix-blend: overlay;
+    }
+    .welcome { position: relative; color: #fff; text-align: left; width: min(520px, 90%); }
+    .welcome h1 { font-size: clamp(2.2rem, 4.2vw, 3.4rem); line-height: 1.05; margin: 0; font-weight: 800; text-shadow: 0 10px 30px rgba(0,0,0,.15); }
+    .welcome .brand { display: inline-flex; align-items: center; gap:.6rem; margin-bottom: 1.25rem; opacity: .95; font-weight: 700; }
+
+    /* Panel droit contenu */
+    .panel-right { background: #fff; display: flex; align-items: center; justify-content: center; padding: clamp(1rem, 4vw, 3rem); }
+    .content { width: min(520px, 92%); }
+    .content h2 { font-size: clamp(1.4rem, 2.4vw, 1.8rem); margin: 0 0 .5rem; font-weight: 800; }
+    .content p { color: var(--muted); margin: 0 0 1.25rem; }
+    .actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: .6rem; padding: .9rem 1.25rem; border-radius: 12px; border: 1px solid var(--border); background: #fff; color: var(--text); text-decoration: none; font-weight: 700; box-shadow: 0 2px 6px rgba(2,6,23,.04); }
+    .btn:hover { box-shadow: 0 8px 18px rgba(2,6,23,.08); }
+    .btn-primary { background: var(--primary); color: #fff; border-color: transparent; box-shadow: 0 12px 24px rgba(139,92,246,.35); }
+    .btn-primary:hover { background: var(--primary-strong); }
+    .helper { margin-top: 1rem; color: var(--muted); }
+    .helper a { color: var(--primary); text-decoration: none; font-weight: 700; }
+
+    @media (max-width: 980px) {
+      .auth-shell { grid-template-columns: 1fr; min-height: auto; }
+      .panel-left { min-height: 38dvh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="panel-left">
+      <div class="blob"></div>
+      <div class="welcome">
+        <div class="brand"><i class="fas fa-wallet"></i> FinanceTracker</div>
+        <h1>Welcome
+          <br/>
+          Back!</h1>
+      </div>
+    </div>
+    <div class="panel-right">
+      <div class="content">
+        <h2>Bienvenue</h2>
+        <p>Connectez-vous à votre compte ou créez-en un nouveau pour commencer à suivre vos finances.</p>
+        <div class="actions">
+          <a href="{{ path('app_login') }}" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Se connecter</a>
+          <a href="{{ path('app_register') }}" class="btn"><i class="fas fa-user-plus"></i> Créer un compte</a>
+        </div>
+        <div class="helper">Nouveau ici ? <a href="{{ path('app_register') }}">Inscription</a></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html> 
