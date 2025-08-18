@@ -99,7 +99,7 @@
         </nav>
 
         <!-- Main Content -->
-        <div class="main-content">
+        <main class="main-content">
             <!-- Header -->
             <header class="header">
                 <div class="header-left">
@@ -130,13 +130,48 @@
             </header>
 
             <!-- Content -->
-            <main class="content">
-                <div class="container">
-                    {% block body %}{% endblock %}
+            <div class="container">
+                {% block body %}{% endblock %}
+            </div>
+            
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <i class="fas fa-wallet"></i>
+                            <span>FinanceTracker</span>
+                        </div>
+                        <p class="footer-description">
+                            Gestion simple et efficace de vos finances personnelles
+                        </p>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4 class="footer-title">Navigation</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                            <li><a href="{{ path('app_home') }}">Dashboard</a></li>
+                            <li><a href="{{ path('app_user_index') }}">Utilisateurs</a></li>
+                            <li><a href="{{ path('app_transaction_index') }}">Transactions</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4 class="footer-title">Support</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">Aide</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Documentation</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </main>
-        </div>
-    </body>
+                
+                <div class="footer-bottom">
+                    <p>&copy; {{ "now"|date("Y") }} FinanceTracker. Tous droits réservés.</p>
+                </div>
+            </footer>
+        </main>
             
             <!-- JavaScript pour le menu mobile -->
             <script>
@@ -177,4 +212,5 @@
                     });
                 });
             </script>
-</html>
+        </body>
+        </html>
