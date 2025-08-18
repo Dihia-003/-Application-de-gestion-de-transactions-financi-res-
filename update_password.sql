@@ -1,0 +1,1 @@
+UPDATE user SET password = '$2y$13$we6SuRQBbjZaUTjcTft/F.5Ae2op8r26S5YVzLRsiHVKNLj/7vGvO' WHERE email = 'dihia.lr@gmail.com'; 

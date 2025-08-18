@@ -1,13 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}Modifier l'utilisateur{% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-edit"></i>
+            Modifier l'utilisateur
+        </h1>
+        <p class="page-subtitle">Modifiez les informations du compte utilisateur</p>
+    </div>
 
-    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="content-card">
+        <div class="content-header">
+            <h3 class="content-title">Modifier {{ user.firstName }} {{ user.lastName }}</h3>
+        </div>
+        <div class="content-body">
+            {{ include('user/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+        </div>
+    </div>
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+    <div class="form-actions" style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+        <a href="{{ path('app_user_index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Retour à la liste
+        </a>
+        
+        <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-primary">
+            <i class="fas fa-eye"></i>
+            Voir l'utilisateur
+        </a>
+    </div>
+</div>
 {% endblock %}

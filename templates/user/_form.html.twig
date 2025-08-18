@@ -1,4 +1,54 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'modern-form'}}) }}
+    <div class="form-grid">
+        <div class="form-group">
+            {{ form_label(form.firstName, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.firstName, {'attr': {'class': 'form-input', 'placeholder': 'Entrez le prénom'}}) }}
+            {{ form_errors(form.firstName) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.lastName, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.lastName, {'attr': {'class': 'form-input', 'placeholder': 'Entrez le nom'}}) }}
+            {{ form_errors(form.lastName) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-input', 'placeholder': 'exemple@email.com'}}) }}
+            {{ form_errors(form.email) }}
+        </div>
+
+        {% if form.password is defined %}
+        <div class="form-group">
+            {{ form_label(form.password, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.password, {'attr': {'class': 'form-input', 'placeholder': 'Entrez le mot de passe'}}) }}
+            {{ form_errors(form.password) }}
+        </div>
+        {% endif %}
+
+        {% if form.plainPassword is defined %}
+        <div class="form-group">
+            {{ form_label(form.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.plainPassword, {'attr': {'class': 'form-input', 'placeholder': 'Entrez le mot de passe'}}) }}
+            {{ form_errors(form.plainPassword) }}
+        </div>
+        {% endif %}
+
+        {% if form.roles is defined %}
+        <div class="form-group">
+            {{ form_label(form.roles, 'Rôles', {'label_attr': {'class': 'form-label'}}) }}
+            <div class="roles-checkboxes">
+                {{ form_widget(form.roles, {'attr': {'class': 'form-checkbox'}}) }}
+            </div>
+            {{ form_errors(form.roles) }}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i>
+            {{ button_label|default('Enregistrer') }}
+        </button>
+    </div>
 {{ form_end(form) }}

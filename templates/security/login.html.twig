@@ -131,7 +131,7 @@
                 </div>
             {% endif %}
             
-            <form method="post">
+            <form method="post" action="{{ path('app_login_check') }}">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>
                     <input type="email" id="username" name="_username" value="{{ last_username }}" class="form-control" required autofocus>
@@ -153,6 +153,12 @@
                     <i class="fas fa-sign-in-alt"></i>
                     Se connecter
                 </button>
+                
+                <div style="margin-top: 1rem; text-align: center;">
+                    <a href="{{ path('app_forgot_password_request') }}" style="color: #8B5CF6; text-decoration: none; font-weight: 500;">
+                        Mot de passe oublié ?
+                    </a>
+                </div>
             </form>
             
             <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">

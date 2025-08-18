@@ -28,6 +28,14 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    #[Route('/login_check', name: 'app_login_check')]
+    public function loginCheck(): void
+    {
+        // Cette méthode ne sera jamais appelée
+        // Elle est interceptée par le firewall
+        throw new \Exception('Cette méthode ne devrait jamais être appelée');
+    }
+
     #[Route('/logout', name: 'app_logout')]
     public function logout(): void
     {

@@ -3,79 +3,106 @@
 {% block title %}Gestion des Utilisateurs{% endblock %}
 
 {% block body %}
-    <div class="card fade-in">
-        <div class="card-header">
-            <h1 class="card-title">
-                <i class="fas fa-users"></i>
-                Gestion des Utilisateurs
-            </h1>
-            <a href="{{ path('app_user_new') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i>
-                Nouvel Utilisateur
-            </a>
-        </div>
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-users"></i>
+            Gestion des Utilisateurs
+        </h1>
+        <p class="page-subtitle">Gérez les comptes et les rôles des utilisateurs</p>
+    </div>
 
-        {% if users|length > 0 %}
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Rôles</th>
-                            <th>Transactions</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for user in users %}
-                        <tr>
-                            <td>
-                                <span class="badge badge-info">#{{ user.id }}</span>
-                            </td>
-                            <td>
-                                <strong>{{ user.firstName }} {{ user.lastName }}</strong>
-                            </td>
-                            <td>
-                                <i class="fas fa-envelope"></i>
-                                {{ user.email }}
-                            </td>
-                            <td>
-                                {% for role in user.roles %}
-                                    <span class="badge badge-success">{{ role }}</span>
-                                {% endfor %}
-                            </td>
-                            <td>
-                                <span class="badge badge-info">{{ user.transactions|length }} transaction(s)</span>
-                            </td>
-                            <td>
-                                <div class="d-flex gap-2">
-                                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-sm btn-secondary">
-                                        <i class="fas fa-eye"></i>
-                                        Voir
-                                    </a>
-                                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i>
-                                        Modifier
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+    <div style="margin-bottom: 1.5rem;">
+        <a href="{{ path('app_user_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            Nouvel Utilisateur
+        </a>
+    </div>
+
+    {% if users|length > 0 %}
+        <div class="content-card">
+            <div class="content-header">
+                <h3 class="content-title">Liste des utilisateurs ({{ users|length }})</h3>
             </div>
-        {% else %}
-            <div class="text-center">
-                <i class="fas fa-users" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
-                <h3>Aucun utilisateur trouvé</h3>
-                <p class="text-muted">Commencez par créer votre premier utilisateur.</p>
+            <div class="content-body">
+                <div class="overflow-x-auto">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Rôles</th>
+                                <th>Transactions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>
+                                    <div style="color: #0f172a; font-weight: 500;">#{{ user.id }}</div>
+                                </td>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="user-avatar">
+                                            {{ user.firstName|first }}{{ user.lastName|first }}
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 600; color: #0f172a; margin-bottom: 0.25rem;">
+                                                {{ user.firstName }} {{ user.lastName }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="color: #0f172a;">{{ user.email }}</div>
+                                </td>
+                                <td>
+                                    {% for role in user.roles %}
+                                        <span class="role-badge {% if role == 'ROLE_ADMIN' %}role-admin{% else %}role-user{% endif %}">
+                                            {{ role }}
+                                        </span>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <span class="role-badge role-user">
+                                        {{ user.transactions|length }} transaction(s)
+                                    </span>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-secondary" style="padding: 0.5rem 0.75rem; font-size: 0.75rem;">
+                                            <i class="fas fa-eye"></i>
+                                            Voir
+                                        </a>
+                                        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning" style="padding: 0.5rem 0.75rem; font-size: 0.75rem;">
+                                            <i class="fas fa-edit"></i>
+                                            Modifier
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="content-card">
+            <div class="content-body" style="text-align: center; padding: 3rem 1.5rem;">
+                <div style="width: 64px; height: 64px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                    <i class="fas fa-users" style="font-size: 2rem; color: #94a3b8;"></i>
+                </div>
+                <h3 style="color: #0f172a; margin-bottom: 0.75rem;">Aucun utilisateur trouvé</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Commencez par créer votre premier utilisateur.</p>
                 <a href="{{ path('app_user_new') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i>
                     Créer le premier utilisateur
                 </a>
             </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

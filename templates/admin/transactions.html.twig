@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des transactions - Admin{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">Gestion des transactions</h1>
+        <p class="page-subtitle">Surveillez et gérez toutes les transactions de l'application</p>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash-message flash-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="content-card">
+        <div class="content-header">
+            <h3 class="content-title">Liste des transactions ({{ transactions|length }})</h3>
+        </div>
+        <div class="content-body">
+            {% if transactions|length > 0 %}
+                <div class="overflow-x-auto">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Utilisateur</th>
+                                <th>Montant</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                                <tr>
+                                    <td>
+                                        <div style="color: #0f172a; font-weight: 500;">#{{ transaction.id }}</div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                            <div class="user-avatar">
+                                                {{ transaction.user.firstName|first }}{{ transaction.user.lastName|first }}
+                                            </div>
+                                            <div>
+                                                <div style="font-weight: 600; color: #0f172a;">
+                                                    {{ transaction.user.firstName }} {{ transaction.user.lastName }}
+                                                </div>
+                                                <div style="font-size: 0.875rem; color: #64748b;">
+                                                    {{ transaction.user.email }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 600; color: #0f172a;">
+                                            {{ transaction.amount|number_format(2, ',', ' ') }} €
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if transaction.type == 'income' %}
+                                            <span style="color: #10b981; font-weight: 500;">↑ Revenu</span>
+                                        {% else %}
+                                            <span style="color: #ef4444; font-weight: 500;">↓ Dépense</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div style="color: #64748b; font-size: 0.875rem;">
+                                            {{ transaction.createdAt|date('d/m/Y H:i') }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('app_transaction_show', {id: transaction.id}) }}" 
+                                           class="action-link">
+                                            Voir
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 3rem 1.5rem;">
+                    <div style="width: 48px; height: 48px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <svg style="width: 24px; height: 24px; color: #94a3b8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <p style="color: #64748b; font-size: 0.875rem;">Aucune transaction trouvée</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div style="margin-top: 1.5rem;">
+        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">
+            <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Retour au dashboard
+        </a>
+    </div>
+</div>
+{% endblock %} 

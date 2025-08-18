@@ -1,54 +1,97 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Transaction{% endblock %}
+{% block title %}Transaction - {{ transaction.title }}{% endblock %}
 
 {% block body %}
-    <h1>Transaction</h1>
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-chart-line"></i>
+            Détails de la transaction
+        </h1>
+        <p class="page-subtitle">Informations complètes de la transaction</p>
+    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ transaction.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ transaction.title }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ transaction.description }}</td>
-            </tr>
-            <tr>
-                <th>Amount</th>
-                <td>{{ transaction.amount }}</td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <td>{{ transaction.type }}</td>
-            </tr>
-            <tr>
-                <th>Category</th>
-                <td>{{ transaction.category }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ transaction.date ? transaction.date|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ transaction.createdAt ? transaction.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ transaction.updatedAt ? transaction.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="content-card">
+        <div class="content-header">
+            <h3 class="content-title">{{ transaction.title }}</h3>
+        </div>
+        <div class="content-body">
+            <div class="transaction-details">
+                <div class="detail-row">
+                    <span class="detail-label">ID :</span>
+                    <span class="detail-value">#{{ transaction.id }}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Titre :</span>
+                    <span class="detail-value">{{ transaction.title }}</span>
+                </div>
+                
+                {% if transaction.description %}
+                <div class="detail-row">
+                    <span class="detail-label">Description :</span>
+                    <span class="detail-value">{{ transaction.description }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="detail-row">
+                    <span class="detail-label">Montant :</span>
+                    <span class="detail-value" style="font-weight: 600; color: {% if transaction.amount >= 0 %}#10b981{% else %}#ef4444{% endif %};">
+                        {{ transaction.amount|number_format(2, ',', ' ') }} €
+                    </span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Type :</span>
+                    <span class="detail-value">
+                        <span class="role-badge {% if transaction.type == 'Revenu' %}role-user{% else %}role-admin{% endif %}">
+                            {{ transaction.type }}
+                        </span>
+                    </span>
+                </div>
+                
+                {% if transaction.category %}
+                <div class="detail-row">
+                    <span class="detail-label">Catégorie :</span>
+                    <span class="detail-value">{{ transaction.category }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="detail-row">
+                    <span class="detail-label">Date :</span>
+                    <span class="detail-value">{{ transaction.date ? transaction.date|date('d/m/Y') : 'Non définie' }}</span>
+                </div>
+                
+                {% if transaction.user %}
+                <div class="detail-row">
+                    <span class="detail-label">Utilisateur :</span>
+                    <div class="detail-value">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div class="user-avatar" style="width: 24px; height: 24px; font-size: 0.75rem;">
+                                {{ transaction.user.firstName|first }}{{ transaction.user.lastName|first }}
+                            </div>
+                            <span>{{ transaction.user.firstName }} {{ transaction.user.lastName }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('app_transaction_index') }}">back to list</a>
-
-    <a href="{{ path('app_transaction_edit', {'id': transaction.id}) }}">edit</a>
-
-    {{ include('transaction/_delete_form.html.twig') }}
+    <div class="form-actions" style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+        <a href="{{ path('app_transaction_edit', {'id': transaction.id}) }}" class="btn btn-warning">
+            <i class="fas fa-edit"></i>
+            Modifier
+        </a>
+        
+        <a href="{{ path('app_transaction_index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Retour à la liste
+        </a>
+        
+        {{ include('transaction/_delete_form.html.twig') }}
+    </div>
+</div>
 {% endblock %}

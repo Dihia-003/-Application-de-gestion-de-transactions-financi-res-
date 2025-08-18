@@ -3,6 +3,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -33,6 +34,16 @@ class RegistrationType extends AbstractType
                     new NotBlank(message: 'Merci d\'entrer un mot de passe'),
                     new Length(min: 8, minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères'),
                 ],
+            ])
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Utilisateur' => 'ROLE_USER',
+                    'Administrateur' => 'ROLE_ADMIN',
+                ],
+                'multiple' => true,
+                'expanded' => true,
+                'label' => 'Rôles',
+                'data' => ['ROLE_USER'], // Rôle par défaut
             ])
         ;
     }

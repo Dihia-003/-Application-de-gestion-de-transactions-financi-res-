@@ -1,11 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Transaction{% endblock %}
+{% block title %}Nouvelle Transaction{% endblock %}
 
 {% block body %}
-    <h1>Create new Transaction</h1>
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-plus"></i>
+            Créer une nouvelle transaction
+        </h1>
+        <p class="page-subtitle">Enregistrez une nouvelle transaction financière</p>
+    </div>
 
-    {{ include('transaction/_form.html.twig') }}
+    <div class="content-card">
+        <div class="content-header">
+            <h3 class="content-title">Détails de la transaction</h3>
+        </div>
+        <div class="content-body">
+            {{ include('transaction/_form.html.twig') }}
+        </div>
+    </div>
 
-    <a href="{{ path('app_transaction_index') }}">back to list</a>
+    <div style="margin-top: 1.5rem;">
+        <a href="{{ path('app_transaction_index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Retour à la liste
+        </a>
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin - FinanceTracker{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Dashboard Administrateur</h1>
+        <p class="dashboard-subtitle">Gérez votre application FinanceTracker</p>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon users">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                </svg>
+            </div>
+            <div class="stat-label">Utilisateurs</div>
+            <div class="stat-value">{{ totalUsers }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon transactions">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <div class="stat-label">Transactions</div>
+            <div class="stat-value">{{ totalTransactions }}</div>
+        </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="actions-grid">
+        <div class="action-card">
+            <h3 class="action-title">Gestion des utilisateurs</h3>
+            <p class="action-description">Gérez les comptes utilisateurs, les rôles et les permissions.</p>
+            <a href="{{ path('app_admin_users') }}" class="action-button users">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                </svg>
+                Gérer les utilisateurs
+            </a>
+        </div>
+
+        <div class="action-card">
+            <h3 class="action-title">Gestion des transactions</h3>
+            <p class="action-description">Surveillez et gérez toutes les transactions de l'application.</p>
+            <a href="{{ path('app_admin_transactions') }}" class="action-button transactions">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+                Gérer les transactions
+            </a>
+        </div>
+    </div>
+
+    <!-- Utilisateurs récents -->
+    <div class="users-section">
+        <div class="users-header">
+            <h3 class="users-title">Utilisateurs récents</h3>
+        </div>
+        <div class="users-content">
+            {% if recentUsers|length > 0 %}
+                {% for user in recentUsers %}
+                    <div class="user-item">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                {{ user.firstName|first }}{{ user.lastName|first }}
+                            </div>
+                            <div class="user-details">
+                                <h4>{{ user.firstName }} {{ user.lastName }}</h4>
+                                <p>{{ user.email }}</p>
+                            </div>
+                        </div>
+                        <div class="user-role {% if 'ROLE_ADMIN' in user.roles %}admin{% else %}user{% endif %}">
+                            {% if 'ROLE_ADMIN' in user.roles %}Admin{% else %}User{% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                    </div>
+                    <p class="empty-text">Aucun utilisateur trouvé</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

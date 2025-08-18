@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs - Admin{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">Gestion des utilisateurs</h1>
+        <p class="page-subtitle">Gérez les comptes et les rôles des utilisateurs</p>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash-message flash-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="content-card">
+        <div class="content-header">
+            <h3 class="content-title">Liste des utilisateurs ({{ users|length }})</h3>
+        </div>
+        <div class="content-body">
+            <div class="overflow-x-auto">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Utilisateur</th>
+                            <th>Email</th>
+                            <th>Rôle</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="user-avatar">
+                                            {{ user.firstName|first }}{{ user.lastName|first }}
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 600; color: #0f172a; margin-bottom: 0.25rem;">
+                                                {{ user.firstName }} {{ user.lastName }}
+                                            </div>
+                                            <div style="font-size: 0.875rem; color: #64748b;">
+                                                ID: {{ user.id }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="color: #0f172a;">{{ user.email }}</div>
+                                </td>
+                                <td>
+                                    {% if 'ROLE_ADMIN' in user.roles %}
+                                        <span class="role-badge role-admin">Administrateur</span>
+                                    {% else %}
+                                        <span class="role-badge role-user">Utilisateur</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ path('app_admin_toggle_admin', {id: user.id}) }}" 
+                                       class="action-link"
+                                       onclick="return confirm('Êtes-vous sûr de vouloir changer le rôle de cet utilisateur ?')">
+                                        {% if 'ROLE_ADMIN' in user.roles %}
+                                            Retirer Admin
+                                        {% else %}
+                                            Rendre Admin
+                                        {% endif %}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 1.5rem;">
+        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">
+            <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Retour au dashboard
+        </a>
+    </div>
+</div>
+{% endblock %} 
